@@ -1,0 +1,51 @@
+<?php
+/**
+ * @file
+ * Primary module hooks for custom report module.
+ *
+ * @DCG
+ * This file is no longer required in Drupal 8.
+ * @see https://www.drupal.org/node/2217931
+ */
+
+use Drupal\Core\Form\FormStateInterface;
+/**
+ * Implements hook_form_alter().
+ */
+function custom_report_form_alter(&$form, FormStateInterface $form_state, $form_id) {
+  // Change form id here.
+  if ($form_id == 'node_cont_form') {
+    $form['#validate'][] = '_form_validation_number_title_validate';
+  }
+  if ($form_id == 'node_report_form' ){
+//    dump($form);
+    $form['#validate'][] = '_form_validation_number_title_validate';
+//    $form['field_month']['widget'][0]['value']['#date_date_element'] = 'month';
+    $form['field_month']['widget'][0]['value']['#date_date_format'] = 'Y-m';
+  }
+}
+
+
+
+
+
+
+
+
+/**
+ * @param $form
+ * @param FormStateInterface $form_state
+ */
+function _form_validation_number_title_validate(&$form, \Drupal\Core\Form\FormStateInterface $form_state) {
+
+  if ($form_state->hasValue('title')) {
+    $title = $form_state->getValue('title');
+
+    if (!is_numeric($title[0]['value'])) {
+      $form_state->setErrorByName('title', t('Your title should be number'));
+    }
+
+  }
+}
+
+
